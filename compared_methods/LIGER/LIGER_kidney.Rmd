@@ -1,0 +1,75 @@
+---
+title: "LIGER_Kidney"
+author: "Yin"
+date: "2023-06-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+
+# gam = gene.activities
+# normalize gene activities
+data_id = "Kidney"
+
+library(rliger)
+library(Seurat)
+# library(SeuratData)
+library(zellkonverter)
+library(SeuratDisk)
+# library(SeuratWrappers)
+
+data_id = "Kidney"
+dataset_dir = "../../data/Kidney/"
+GAM_id <- readline(prompt = "please input the name of the GAM method：")
+
+
+sce2 <- readH5AD(paste0(dataset_dir, "GASM/scGAM_", GAM_id, ".h5ad"))
+gam = sce2@assays@data@listData[["X"]]
+sce <- readH5AD(paste0(dataset_dir, "GASM/rna.h5ad"))
+rna = sce@assays@data@listData[["X"]]
+
+idx = intersect(rownames(gam), rownames(rna))
+gam_filter = gam[idx, ]
+rna_filter = rna[idx, ]
+
+gam_name = paste0(colnames(gam_filter), '-GAM')
+rna_name = paste0(colnames(rna_filter), '-RNA')
+colnames(gam_filter) = gam_name
+colnames(rna_filter) = rna_name
+
+share.data <- list(atac = gam_filter, rna = rna_filter)
+int.share <- createLiger(share.data)
+int.share <- normalize(int.share)
+int.share <- selectGenes(int.share, datasets.use = 2)
+int.share <- scaleNotCenter(int.share)
+int.share <- optimizeALS(int.share, k = 20)
+int.share <- quantile_norm(int.share)
+# int.share <- louvainCluster(int.share, resolution = 0.2)
+int.share <- runUMAP(int.share, distance = 'cosine', n_neighbors = 30, min_dist = 0.3)
+
+combed = t(int.share@H.norm)
+rownames(combed) = paste0("dim-", 1:dim(combed)[1])
+combed = CreateSeuratObject(counts = combed)
+combed@meta.data[["cell_type"]]=c(sce2@colData@listData[["cell_type"]], sce@colData@listData[["cell_type"]])
+combed@meta.data[["clusters"]]=c(sce2@colData@listData[["clusters"]], sce@colData@listData[["clusters"]])
+combed@meta.data[["batch"]]=c(rep("scATAC-seq",ncol(gam)), rep("scRNA-seq",ncol(rna)))
+
+folder_path <- paste0("../results/LIGER/", data_id)
+if (!file.exists(folder_path)) {
+  dir.create(folder_path, recursive = TRUE)
+}
+
+
+
+
+SaveH5Seurat(combed, filename = paste0(folder_path, '/', GAM_id, ".h5Seurat"),overwrite=T)
+Convert(paste0(folder_path, '/', GAM_id, ".h5Seurat"), dest = "h5ad")
+
+
+```
+
