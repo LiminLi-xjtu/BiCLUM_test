@@ -1,0 +1,113 @@
+---
+title: "BMMC_s1d1"
+author: "Yin"
+date: "2023-06-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(Seurat)
+library(Signac)
+library(EnsDb.Hsapiens.v86)
+library(ggplot2)
+library(cowplot)
+library("SeuratDisk")
+library("zellkonverter")
+
+data_id = "BMMC_s1d1"
+
+sce <- readH5AD("../../data/BMMC/s1d1/GASM/rna.h5ad")
+rna = sce@assays@data@listData[["X"]]
+# 
+pbmc.rna <- CreateSeuratObject(counts = rna, assay = "RNA")
+pbmc.rna <- NormalizeData(pbmc.rna)
+pbmc.rna <- FindVariableFeatures(pbmc.rna)
+pbmc.rna <- ScaleData(pbmc.rna)
+# pbmc.rna <- RunPCA(pbmc.rna)
+# pbmc.rna <- RunUMAP(pbmc.rna, dims = 1:30)
+
+sce2 <- readH5AD("../../data/BMMC/s1d1/GASM/atac.h5ad")
+data.atac = sce2@assays@data@listData[["X"]]
+grange.counts <- StringToGRanges(rownames(data.atac), sep = c(":", "-"))
+grange.use <- seqnames(grange.counts) %in% standardChromosomes(grange.counts)
+data.atac <- data.atac[as.vector(grange.use), ]
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotations) <- 'UCSC'
+genome(annotations) <- "hg38"
+frag.file <- "../../data/BMMC/s1d1/bmmc_site1_or_donor1_atac_fragments.tsv.gz"
+chrom_assay <- CreateChromatinAssay(
+  counts = data.atac,
+  sep = c(":", "-"),
+  genome = 'hg38',
+  fragments = frag.file,
+  min.cells = 10,
+  annotation = annotations
+)
+pbmc.atac <- CreateSeuratObject(
+  counts = chrom_assay,
+  assay = "ATAC"
+)
+
+pbmc.atac <- RunTFIDF(pbmc.atac)
+pbmc.atac <- FindTopFeatures(pbmc.atac, min.cutoff = "q0")
+pbmc.atac <- RunSVD(pbmc.atac)
+pbmc.atac <- RunUMAP(pbmc.atac, reduction = "lsi", dims = 2:30)
+
+DefaultAssay(pbmc.atac) <- "ATAC"
+gene.activities <- GeneActivity(object=pbmc.atac, features = NULL)
+
+
+gene.activities2 <- GeneActivity(object=pbmc.atac, features = VariableFeatures(pbmc.rna))
+pbmc.atac[["ACTIVITY"]] <- CreateAssayObject(counts = gene.activities2)
+# normalize gene activities
+DefaultAssay(pbmc.atac) <- "ACTIVITY"
+pbmc.atac <- NormalizeData(pbmc.atac)
+pbmc.atac <- ScaleData(pbmc.atac, features = rownames(pbmc.atac))
+
+transfer.anchors <- FindTransferAnchors(reference = pbmc.rna, query = pbmc.atac, features = VariableFeatures(object = pbmc.rna), reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
+```
+
+```{r}
+# Identify anchors
+transfer.anchors <- FindTransferAnchors(reference = pbmc.rna, query = pbmc.atac, features = VariableFeatures(object = pbmc.rna), reference.assay = "RNA", query.assay = "ACTIVITY", reduction = "cca")
+# features = VariableFeatures(object = pbmc.rna), 
+```
+
+
+```{r}
+# note that we restrict the imputation to variable genes from scRNA-seq, but could impute the
+# full transcriptome if we wanted to
+genes.use <- VariableFeatures(pbmc.rna)
+refdata <- GetAssayData(pbmc.rna, assay = "RNA", slot = "data")[genes.use, ]
+
+# refdata (input) contains a scRNA-seq expression matrix for the scRNA-seq cells.  imputation
+# (output) will contain an imputed scRNA-seq matrix for each of the ATAC cells
+imputation <- TransferData(anchorset = transfer.anchors, refdata = refdata, weight.reduction = pbmc.atac[["lsi"]],
+    dims = 2:30)
+pbmc.atac[["RNA"]] <- imputation
+
+coembed <- merge(x = pbmc.rna, y = pbmc.atac)
+
+# Finally, we run PCA and UMAP on this combined object, to visualize the co-embedding of both
+# datasets
+coembed <- ScaleData(coembed, features = genes.use, do.scale = FALSE)
+coembed <- RunPCA(coembed, features = genes.use, verbose = FALSE)
+coembed <- RunUMAP(coembed, dims = 1:30)
+
+
+folder_path <- "../results/Seurat/" 
+if (!file.exists(folder_path)) {
+  dir.create(folder_path, recursive = TRUE)
+}
+
+
+SaveH5Seurat(coembed, filename = paste0(folder_path, data_id, ".h5Seurat"),overwrite=T)
+Convert(paste0(folder_path, data_id, ".h5Seurat"), dest = "h5ad")
+
+```
+
