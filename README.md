@@ -66,9 +66,6 @@ The source code and datasets for the BiCLUM study are available at:
 - GitHub: [https://github.com/LiminLi-xjtu/BiCLUM](https://github.com/LiminLi-xjtu/BiCLUM)  
 - Zenodo: [https://zenodo.org/records/14506611](https://zenodo.org/records/14506611)  
 
-The code for reproducing the results is available at:  
-- [https://github.com/LiminLi-xjtu/BiCLUM_test](https://github.com/LiminLi-xjtu/BiCLUM_test)  
-
 ---  
 
 For further details, refer to the documentation and supplementary materials in the repository.
