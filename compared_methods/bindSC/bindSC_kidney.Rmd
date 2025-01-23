@@ -1,0 +1,165 @@
+---
+title: "bindSC_PBMC2"
+author: "Yin"
+date: "2023-06-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# install_github('KChen-lab/bindSC')
+# rmarkdown::render('bindsc_linux.Rmd',output_file='ArchR.html')
+library(zellkonverter)
+library(bindSC)
+library(Seurat)
+library(Signac)
+library(SeuratDisk)
+```
+
+
+Stage 1: load data
+
+```{r load data}
+GAM_id <- readline(prompt = "please input the name of the GAM method：")
+# GAM_id = 'cisTopic'
+data_id = "Kidney"
+dataset_dir = "../../data/Kidney/"
+
+
+sce <- readH5AD(paste0(dataset_dir, "GASM/rna.h5ad"))
+sce2 <- readH5AD(paste0(dataset_dir, "GASM/atac.h5ad"))
+sce3 <- readH5AD(paste0(dataset_dir, "GASM/scGAM_", GAM_id, ".h5ad"))
+
+gene_intersect = intersect(rownames(sce), rownames(sce3))
+cell_intersect = intersect(colnames(sce2), colnames(sce3))
+rna_idx = match(gene_intersect, rownames(sce))
+
+
+RNA = sce@assays@data@listData[["X"]]
+scRNA = RNA[gene_intersect,]
+sce3 = sce3[gene_intersect, cell_intersect]
+sce2 = sce2[, cell_intersect]
+
+# scRNA = sce@assays@data@listData[["X"]]
+scATAC= sce2@assays@data@listData[["X"]]
+scGAM <- sce3@assays@data@listData[["X"]]
+
+```
+
+
+```{r}
+print("dim of RNA-seq")
+dim(scRNA)
+print("dim of ATAC-seq")
+dim(scATAC)
+print("dim of GAM")
+dim(scGAM)
+# identical(rownames(scRNA), rownames(scGAM))
+# identical(colnames(scATAC), colnames(scGAM))
+```
+
+Stage 2: Preparation of bindSC input
+
+```{r}
+X <- scRNA
+Y <- scATAC
+Z0 <- scGAM
+
+
+
+type <- c(rep("scRNA-seq",ncol(X)), rep("scATAC-seq",ncol(Y)))
+
+# gene.overlap <- intersect(rownames(X), rownames(Z0))
+# cell.overlap <- intersect(colnames(Y), colnames(Z0))
+# 
+# X <- as.matrix(X[gene.overlap,])
+# Z0 <- as.matrix(Z0[gene.overlap, cell.overlap])
+# Y <- as.matrix(Y[,cell.overlap])
+
+out <- dimReduce( dt1 =  X, dt2 = Z0,  K = 30)
+x <- out$dt1
+z0 <- out$dt2
+y  <- dimReduce(dt1 = Y, K=30)
+```
+
+Stage 3: Parameter optimization [optional]
+
+```{r}
+x.clst = sce@colData@listData[["cell_type"]]
+y.clst = sce2@colData@listData[["cell_type"]]
+# 
+# # Given cells from 1/3hs are not separatable in A549 dataset, we only consider pre/post treatments
+# x.clst <- X.clst 
+# y.clst <- Y.clst
+# x.clst[x.clst>0] <- 1
+# y.clst[y.clst>0] <- 1
+run <- FALSE
+if(run){
+  paraSel <- BiCCA_para_opt( X = t(x) ,
+               Y = t(y),
+               Z0 =t(z0),
+               X.clst = x.clst,
+               Y.clst = y.clst,
+               alpha.lst= seq(0,1,0.1),
+               K.lst = c(5),
+               lambda.lst = seq(0,1,0.1),
+               num.iteration = 50,
+               tolerance = 0.01,
+               save = TRUE,
+               block.size = 1000
+  )
+}
+# 
+# run <- FALSE
+# if(run){
+#   p1 <- paraSel_plot(paraSel)
+#   p1
+#   
+#   tiff("paraSel.tiff", width=12, height =3, res =300, units = "in")
+#   print(p1)
+#   dev.off()
+# }
+```
+
+Stage 4: Run bindSC
+
+```{r}
+res <- BiCCA( X = t(x) ,
+             Y = t(y), 
+             Z0 =t(z0), 
+             X.clst = x.clst,
+             Y.clst = y.clst,
+             alpha = 0.1, 
+             lambda = 0.5,
+             K = 5,
+             temp.path  = "out",
+             num.iteration = 50,
+             tolerance = 0.01,
+             save = TRUE,
+             parameter.optimize = FALSE,
+             block.size = 0)
+
+rownames(res$r) = paste0(rownames(res$r), "-2")
+cobed = rbind(res$u, res$r)
+cobed = t(cobed)
+rownames(cobed) = paste0("dim-", 1:dim(cobed)[1])
+cobed = CreateSeuratObject(counts = cobed)
+
+cobed@meta.data[["cell_type"]]=c(x.clst, y.clst)
+cobed@meta.data[["batch"]]=type
+
+
+folder_path <- paste0("../results/bindsc/", data_id)
+if (!file.exists(folder_path)) {
+  dir.create(folder_path, recursive = TRUE)
+}
+
+
+SaveH5Seurat(cobed, filename = paste0(folder_path, '/', GAM_id, ".h5Seurat"),overwrite=T)
+Convert(paste0(folder_path, '/', GAM_id, ".h5Seurat"), dest = "h5ad")
+
+```
