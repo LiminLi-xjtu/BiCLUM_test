@@ -20,25 +20,6 @@ The repository is organized into three main folders:
 
 ---
 
-## Included Comparison Methods  
-
-Below is a list of the comparison methods evaluated in this study, along with their respective GitHub repositories:  
-
-- **[GLUE](https://github.com/gao-lab/GLUE)**  
-- **[JointMDS](https://github.com/BorgwardtLab/JointMDS)**  
-- **[LIGER](https://github.com/welch-lab/liger)**  
-- **[MMD-MA](https://bitbucket.org/noblelab/2019_mmd_wabi/src/master/)**  
-- **[MultiMAP](https://github.com/Teichlab/MultiMAP)**  
-- **[Pamona](https://github.com/caokai1073/Pamona)**  
-- **[SCOT](https://github.com/rsinghlab/SCOT)**  
-- **[Seurat](https://satijalab.org/seurat/)**  
-- **[UnionCom](https://github.com/caokai1073/UnionCom)**  
-- **[bindSC](https://github.com/KChen-lab/bindSC)**  
-- **[scDART](https://github.com/PeterZZQ/scDART)**  
-- **[scTopoGAN](https://github.com/AkashCiel/scTopoGAN)**  
-- **[uniPort](https://github.com/caokai1073/uniPort)**  
-
----
 
 ## How to Reproduce Results
 
@@ -76,6 +57,17 @@ Below is a list of the comparison methods evaluated in this study, along with th
   - Evaluation metrics: `eva/`
   - Visualizations: `vis/`
 - **PBMC Example**: While the instructions focus on PBMC data, similar steps can be followed for other datasets by replacing `PBMC` with the corresponding dataset name in the scripts.
+
+---  
+
+## Reproducibility  
+
+The source code and datasets for the BiCLUM study are available at:  
+- GitHub: [https://github.com/LiminLi-xjtu/BiCLUM](https://github.com/LiminLi-xjtu/BiCLUM)  
+- Zenodo: [https://zenodo.org/records/14506611](https://zenodo.org/records/14506611)  
+
+The code for reproducing the results is available at:  
+- [https://github.com/LiminLi-xjtu/BiCLUM_test](https://github.com/LiminLi-xjtu/BiCLUM_test)  
 
 ---  
 
