@@ -8,7 +8,7 @@ import os
 import anndata
 
 
-data_id = "Kidney"
+data_id = "PBMC_unpaired"
 
 path = '../datasets/' + data_id
 data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
@@ -16,6 +16,7 @@ data2 = anndata.read(os.path.join(path, "raw_data_atac.h5ad"))
 X1 = data1.X
 X2 = data2.X
 data = [X1, X2]
+
 
 
 

@@ -8,7 +8,7 @@ import os
 import anndata
 
 
-data_id = "Kidney"
+data_id = "BMMC_paired"
 
 path = '../datasets/' + data_id
 data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
