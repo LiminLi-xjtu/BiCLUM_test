@@ -25,7 +25,7 @@ Stage 1: load data
 
 ```{r load data}
 GAM_id <- readline(prompt = "please input the name of the GAM method：")
-data_id = "BMMC_s1d1"
+data_id = "BMMC_paired"
 dataset_dir = "../../data/BMMC/s1d1/"
 
 
@@ -162,3 +162,4 @@ SaveH5Seurat(cobed, filename = paste0(folder_path, '/', GAM_id, ".h5Seurat"),ove
 Convert(paste0(folder_path, '/', GAM_id, ".h5Seurat"), dest = "h5ad")
 
 ```
+
