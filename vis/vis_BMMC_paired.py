@@ -4,7 +4,7 @@ import anndata
 from plot_func import *
 
 
-dataset_name = "BMMC_s1d1"
+dataset_name = "BMMC_paired"
 dataset_type = 'RNA_ATAC'
 GAM_name = 'Signac'
 part = True
@@ -148,3 +148,4 @@ for i in range(len(obsm_names_metrics)):
 
 
 metrics_plot(eva_metrics, method_colors, vis_dir)
+
