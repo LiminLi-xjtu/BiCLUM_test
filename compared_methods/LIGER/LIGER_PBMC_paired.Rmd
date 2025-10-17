@@ -1,5 +1,5 @@
 ---
-title: "LIGER_PBMC2"
+title: "LIGER_PBMC_paired"
 author: "Yin"
 date: "2023-06-27"
 output: html_document
@@ -23,7 +23,7 @@ library(SeuratDisk)
 # library(SeuratData)
 # library(SeuratWrappers)
 
-data_id = "PBMC"
+data_id = "PBMC_paired"
 GAM_id <- readline(prompt = "please input the name of the GAM method：")
 sce2 = readH5AD(paste0("../../PBMC/GASM/scGAM_", GAM_id, ".h5ad"))
 gam = sce2@assays@data@listData[["X"]]
@@ -66,4 +66,5 @@ Convert(paste0(folder_path, '/', GAM_id, ".h5Seurat"), dest = "h5ad")
 
 
 ```
+
 
