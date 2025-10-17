@@ -21,6 +21,9 @@ Below are the methods evaluated in the study, along with their corresponding Git
 - **[scDART](https://github.com/PeterZZQ/scDART)**  
 - **[scTopoGAN](https://github.com/AkashCiel/scTopoGAN)**  
 - **[uniPort](https://github.com/caokai1073/uniPort)**  
+- **[scMoMaT](https://github.com/PeterZZQ/scMoMaT)**
+- **[scCross](https://github.com/mcgilldinglab/scCross)**
+- **[MultiVI](https://scvi-tools.org/)**
 
 ---
 
