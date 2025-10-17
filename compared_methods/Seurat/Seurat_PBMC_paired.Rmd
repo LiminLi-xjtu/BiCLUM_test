@@ -19,9 +19,9 @@ library(cowplot)
 library("SeuratDisk")
 library("zellkonverter")
 
-data_id = "PBMC"
+data_id = "PBMC_paired"
 
-sce <- readH5AD("../../data/KPBMC/GASM/rna.h5ad")
+sce <- readH5AD("../../data/PBMC_paired/GASM/rna.h5ad")
 rna = sce@assays@data@listData[["X"]]
 # 
 pbmc.rna <- CreateSeuratObject(counts = rna, assay = "RNA")
@@ -106,4 +106,5 @@ SaveH5Seurat(coembed, filename = paste0(folder_path, data_id, ".h5Seurat"),overw
 Convert(paste0(folder_path, data_id, ".h5Seurat"), dest = "h5ad")
 
 ```
+
 
