@@ -4,7 +4,7 @@ import anndata
 from plot_func import *
 
 
-dataset_name = "PBMC"
+dataset_name = "PBMC_paired"
 dataset_type = 'RNA_ATAC'
 GAM_name = 'ArchR'
 paired = True
@@ -126,6 +126,7 @@ for i in range(len(obsm_names_metrics)):
 
 
 metrics_plot(eva_metrics, method_colors, vis_dir)
+
 
 
 
