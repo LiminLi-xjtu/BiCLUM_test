@@ -10,11 +10,12 @@ The repository is organized into three main folders:
 
 1. **`compared_methods`**  
    This folder contains the implementation of all comparison methods used in the paper. Each method includes a script for running the analysis on the PBMC dataset (e.g., `PBMC.py`).
+   All runs used the default parameters from the official implementations or publications; details and links are listed in `./compared_methods/README.md`.
 
-2. **`eva`**  
+3. **`eva`**  
    This folder includes the scripts for evaluating the results using the quantitative metrics described in the paper. For example, `eva_PBMC.py` computes all metrics for the PBMC dataset.
 
-3. **`vis`**  
+4. **`vis`**  
    This folder contains scripts for generating visualizations of the results. For instance, `vis_pbmc.py` produces all figures related to the PBMC dataset included in the paper.
 
 
