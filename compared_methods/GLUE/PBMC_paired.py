@@ -12,9 +12,8 @@ import anndata
 
 species = 'Human' #'Human', "Mouse
 
-data_id = "PBMC"
-dataset_dir ='../../data/PBMC/'
-# dataset_dir ='../../BC2/data/PF_EPN/'
+data_id = "PBMC_paired"
+dataset_dir ='../../data/PBMC_paired/'
 rna = anndata.read(os.path.join(dataset_dir, 'rna.h5ad'))
 atac = anndata.read(os.path.join(dataset_dir, 'atac.h5ad'))
 rna.obs['batch'] = 'RNA_c'
@@ -45,5 +44,6 @@ if not os.path.exists(path):
 
 inte1.write(os.path.join(path, "glue_rna.h5ad"))
 inte2.write(os.path.join(path, "glue_atac.h5ad"))
+
 
 
