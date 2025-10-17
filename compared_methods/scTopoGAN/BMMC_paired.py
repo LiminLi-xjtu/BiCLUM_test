@@ -8,7 +8,7 @@ from scTopoGAN_Functions import get_TopoAE_Embeddings, run_scTopoGAN
 # load data
 # RNA = pd.read_csv('Data/PBMC Multiome/RNA_PCA.csv',header=0,index_col=0)
 # ATAC = pd.read_csv('Data/PBMC Multiome/ATAC_LSI.csv',header=0,index_col=0)
-data_id = 'BMMC_s1d1'
+data_id = 'BMMC_paired'
 # dataset_dir = '../datasets/' + data_id
 # data = np.load(os.path.join(dataset_dir, "rawdata.npy"), allow_pickle=True)
 # RNA = data[0]
