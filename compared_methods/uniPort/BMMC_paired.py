@@ -12,7 +12,7 @@ import sys
 
 def main():
     ####################################################################
-    data_id = "BMMC_s1d1"
+    data_id = "BMMC_paired"
     GAM = input("please input GAM ID:")
     dataset_dir = '../../data/BMMC/s1d1/'
     adata_atac = anndata.read(os.path.join(dataset_dir, 'GASM/scGAM_' + GAM + '.h5ad'))
@@ -82,3 +82,4 @@ def main():
     adata.write_h5ad(os.path.join(path, GAM + '.h5ad'),compression='gzip')
 
 main()
+
