@@ -26,8 +26,8 @@ Stage 1: load data
 ```{r load data}
 GAM_id <- readline(prompt = "please input the name of the GAM method：")
 # GAM_id = 'cisTopic'
-data_id = "PBMC"
-dataset_dir = "../../data/PBMC/"
+data_id = "PBMC_paired"
+dataset_dir = "../../data/PBMC_paired/"
 
 
 sce <- readH5AD(paste0(dataset_dir, "GASM/rna.h5ad"))
@@ -163,3 +163,4 @@ SaveH5Seurat(cobed, filename = paste0(folder_path, '/', GAM_id, ".h5Seurat"),ove
 Convert(paste0(folder_path, '/', GAM_id, ".h5Seurat"), dest = "h5ad")
 
 ```
+
