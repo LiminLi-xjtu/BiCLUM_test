@@ -13,7 +13,7 @@ from evaluation import evaluate
 
 
 
-dataset_name = "BMMC_s1d1"
+dataset_name = "BMMC_paired"
 dataset_type = 'RNA_ATAC'
 GAM_name = 'Signac'
 paired=True
@@ -53,4 +53,5 @@ eva_metrics_raw = evaluate(adata, anno_rna, anno_other, paired)
 eva_metrics_gasm = evaluate(adata_gasm, anno_rna_gasm, anno_other_gasm, paired)
 eva_metrics = pd.concat([eva_metrics_raw, eva_metrics_gasm], axis=1)
 eva_metrics.to_csv(eva_dir + '/eva_metrics_' + GAM_name + '.csv', index=True)
+
 
