@@ -11,7 +11,7 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import preprocessing
 
 ####################################################################
-data_id = "PBMC"
+data_id = "PBMC_paired"
 ####################################################################
 
 class params():
@@ -185,3 +185,4 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 np.save(os.path.join(path, 'unioncom.npy'), unioncom_inte)
+
