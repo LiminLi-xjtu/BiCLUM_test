@@ -30,7 +30,7 @@ import argparse
 from sklearn.metrics import pairwise_distances
 
 ####################################################################
-data_id = "Kidney"
+data_id = "BMMC_paired"
 ####################################################################
 
 USAGE = """USAGE: manifold_align_mmd_pytorch.py <input_k1> <input_k2> <result_dir> <num_feat> <sigma> <lambda1> <lambda2>
@@ -331,19 +331,21 @@ def main():
         obj_list.append(obj.data.item())
         np.savetxt(results_dir + "objective_" + str(seed) + ".txt", [obj.data.item()])
 
-    # i = 10000
-    # for seed in range(5):
-    #     obj_val = np.loadtxt(results_dir + "objective_" + str(seed) + ".txt")
-    #     obj_list.append(obj_val)
+    i = 10000
+    for seed in range(5):
+        obj_val = np.loadtxt(results_dir + "objective_" + str(seed) + ".txt")
+        obj_list.append(obj_val)
     best_seed = obj_list.index(max(obj_list))
     results_dir_seed = results_dir + "seed_" + str(best_seed) + "/"
     alpha = np.loadtxt(results_dir_seed + "alpha_hat_" + str(best_seed) + "_" + str(i) + ".txt").astype('float32')
     beta = np.loadtxt(results_dir_seed + "beta_hat_" + str(best_seed) + "_" + str(i) + ".txt").astype('float32')
 
-    inte = [torch.mm(K1, torch.from_numpy(alpha).to(device)), torch.mm(K2, torch.from_numpy(beta).to(device))]
+ 
 
+    inte = [torch.mm(K1, torch.from_numpy(alpha).to(device)).cpu().detach().numpy(),
+            torch.mm(K2, torch.from_numpy(beta).to(device)).cpu().detach().numpy()]
     MMDMA_inte = dict({"inte": inte})
-
-    np.save(os.path.join(path, 'MMDMA.npy'), MMDMA_inte)
+    np.save('../results/' + data_id + '/MMDMA.npy', MMDMA_inte)
 
 main()
+

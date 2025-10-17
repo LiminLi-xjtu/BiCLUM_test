@@ -30,7 +30,7 @@ import argparse
 from sklearn.metrics import pairwise_distances
 
 ####################################################################
-data_id = "Kidney"
+data_id = "PBMC_paired"
 ####################################################################
 
 USAGE = """USAGE: manifold_align_mmd_pytorch.py <input_k1> <input_k2> <result_dir> <num_feat> <sigma> <lambda1> <lambda2>

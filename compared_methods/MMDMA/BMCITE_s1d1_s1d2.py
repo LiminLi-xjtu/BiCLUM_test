@@ -30,7 +30,7 @@ import argparse
 from sklearn.metrics import pairwise_distances
 
 ####################################################################
-data_id = "Kidney"
+data_id = "BMCITE_s1d1_s1d2"
 ####################################################################
 
 USAGE = """USAGE: manifold_align_mmd_pytorch.py <input_k1> <input_k2> <result_dir> <num_feat> <sigma> <lambda1> <lambda2>
@@ -209,15 +209,17 @@ parser = argparse.ArgumentParser(description='''MMD-MA implementation.\n
 Input: (n by n) similarity matrices in tsv format\n
 Output: (n by p) mapping matrices''')
 parser.add_argument('--lambda_1', type=float, default='0.01', help='lambda1 in loss function, 0.01 by default')
-parser.add_argument('--lambda_2', type=float, default='0.001', help='lambda2 in loss function, 0.001 by default')
+parser.add_argument('--lambda_2', type=float, default='0.01', help='lambda2 in loss function, 0.001 by default')
 parser.add_argument('--nfeat', type=int, default='5', help='embedded dimensions, 5 by default')
 parser.add_argument('--sigma', type=float, default='0.0', help='Gaussian kernel bandwidth in MMD, 0.0 by default')
 parser.add_argument('--training_rate', type=float, help='training rate for MMD-MA, 0.00005 by default')
 args = parser.parse_args()
 
 
+dataset_dir = '../data/'
+result_dir = "./results/" + data_id
 
-path = '../results/' + data_id + '/MMDMA/'
+path = './results/' + data_id + '/MMDMA/'
 if not os.path.exists(path):
     os.makedirs(path)
 
@@ -225,9 +227,13 @@ def main():
     print("Loading data...")
 
 
-    data_path = '../datasets/' + data_id
-    X1 = anndata.read(os.path.join(data_path, "raw_data_rna.h5ad"))
-    X2 = anndata.read(os.path.join(data_path, "raw_data_atac.h5ad"))
+    data_path1 = './data/BMCITE_s1d1_s1d2'
+    data_path2 = './data/BMCITE_s1d1_s1d2'
+    X1 = anndata.read(os.path.join(data_path1, "rna.h5ad"))
+    X2 = anndata.read(os.path.join(data_path2, "adt.h5ad"))
+
+
+
     c1_matrix = torch.FloatTensor(X1.X)
     c2_matrix = torch.FloatTensor(X2.X)
     k_sigma = torch.FloatTensor([1])
@@ -331,19 +337,24 @@ def main():
         obj_list.append(obj.data.item())
         np.savetxt(results_dir + "objective_" + str(seed) + ".txt", [obj.data.item()])
 
-    # i = 10000
-    # for seed in range(5):
-    #     obj_val = np.loadtxt(results_dir + "objective_" + str(seed) + ".txt")
-    #     obj_list.append(obj_val)
+    i = 10000
+    for seed in range(5):
+        obj_val = np.loadtxt(results_dir + "objective_" + str(seed) + ".txt")
+        obj_list.append(obj_val)
     best_seed = obj_list.index(max(obj_list))
     results_dir_seed = results_dir + "seed_" + str(best_seed) + "/"
     alpha = np.loadtxt(results_dir_seed + "alpha_hat_" + str(best_seed) + "_" + str(i) + ".txt").astype('float32')
     beta = np.loadtxt(results_dir_seed + "beta_hat_" + str(best_seed) + "_" + str(i) + ".txt").astype('float32')
 
-    inte = [torch.mm(K1, torch.from_numpy(alpha).to(device)), torch.mm(K2, torch.from_numpy(beta).to(device))]
+  
 
+
+    inte = [torch.mm(K1, torch.from_numpy(alpha).to(device)).cpu().detach().numpy(),
+            torch.mm(K2, torch.from_numpy(beta).to(device)).cpu().detach().numpy()]
     MMDMA_inte = dict({"inte": inte})
+    # np.save('../results/' + data_id + '/MMDMA.npy', MMDMA_inte)
 
-    np.save(os.path.join(path, 'MMDMA.npy'), MMDMA_inte)
+    np.save(os.path.join(results_dir, 'MMDMA.npy'), MMDMA_inte)
 
 main()
+
