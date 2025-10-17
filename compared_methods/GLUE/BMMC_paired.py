@@ -11,7 +11,6 @@ import anndata
 # conda install -c "pytorch/label/nightly" faiss-gpu
 
 species = 'Human' #'Human', "Mouse
-
 data_id = "BMMC_paired"
 dataset_dir ='../../data/BMMC/s1d1/GASM/'
 # dataset_dir ='../../BC2/data/PF_EPN/'
@@ -45,6 +44,7 @@ if not os.path.exists(path):
 
 inte1.write(os.path.join(path, "glue_rna.h5ad"))
 inte2.write(os.path.join(path, "glue_atac.h5ad"))
+
 
 
 
