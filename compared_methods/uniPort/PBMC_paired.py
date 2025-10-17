@@ -11,7 +11,7 @@ import os
 import sys
 
 ####################################################################
-data_id = "PBMC2"
+data_id = "PBMC_paired"
 # GAM = 'ArchR' #input("please input GAM ID:")
 GAM = sys.argv[1]
 dataset_dir = '../../data/PBMC2/' # '../../../../data/guoyin/1-comp_methods/datasets/8-PBMC1/'
@@ -85,3 +85,4 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 inte.write_h5ad(os.path.join(path, GAM + '.h5ad'),compression='gzip')
+
