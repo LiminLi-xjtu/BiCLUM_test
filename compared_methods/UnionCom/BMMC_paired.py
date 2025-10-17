@@ -31,7 +31,6 @@ class params():
     row = []
     output_dim = 32
 
-
 def fit_transform(dataset, epoch_pd=20000, epoch_DNN=200, \
                   epsilon=0.001, lr=0.001, batch_size=100, rho=10, beta=1, \
                   log_DNN=50, log_pd=1000, manual_seed=666, delay=0, kmax=40, \
@@ -185,4 +184,5 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 np.save(os.path.join(path, 'unioncom.npy'), unioncom_inte)
+
 
