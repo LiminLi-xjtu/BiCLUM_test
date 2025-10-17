@@ -12,7 +12,7 @@ import anndata
 
 species = 'Human' #'Human', "Mouse
 
-data_id = "BMMC_s1d1"
+data_id = "BMMC_paired"
 dataset_dir ='../../data/BMMC/s1d1/GASM/'
 # dataset_dir ='../../BC2/data/PF_EPN/'
 rna = anndata.read(os.path.join(dataset_dir, 'rna.h5ad'))
@@ -45,5 +45,6 @@ if not os.path.exists(path):
 
 inte1.write(os.path.join(path, "glue_rna.h5ad"))
 inte2.write(os.path.join(path, "glue_atac.h5ad"))
+
 
 
