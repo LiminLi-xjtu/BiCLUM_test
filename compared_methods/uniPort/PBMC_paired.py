@@ -14,7 +14,7 @@ import sys
 data_id = "PBMC_paired"
 # GAM = 'ArchR' #input("please input GAM ID:")
 GAM = sys.argv[1]
-dataset_dir = '../../data/PBMC2/' # '../../../../data/guoyin/1-comp_methods/datasets/8-PBMC1/'
+dataset_dir = '../../data/PBMC_paired/' # '../../../../data/guoyin/1-comp_methods/datasets/8-PBMC1/'
 adata_atac = anndata.read(os.path.join(dataset_dir, 'GASM/scGAM_' + GAM + '.h5ad'))
 adata_rna = anndata.read(os.path.join(dataset_dir, 'GASM/rna.h5ad'))
 ####################################################################
@@ -85,4 +85,5 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 inte.write_h5ad(os.path.join(path, GAM + '.h5ad'),compression='gzip')
+
 
