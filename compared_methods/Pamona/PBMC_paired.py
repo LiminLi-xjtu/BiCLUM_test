@@ -8,7 +8,7 @@ import os
 import anndata
 
 
-data_id = "PBMC"
+data_id = "PBMC_paired"
 
 path = '../datasets/' + data_id
 data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
@@ -37,6 +37,7 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 np.save(os.path.join(path, 'Pamona.npy'), Pamona_inte)
+
 
 
 
