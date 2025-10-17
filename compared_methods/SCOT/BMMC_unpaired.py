@@ -16,7 +16,7 @@ import anndata
 ####################################################################
 numk = 50
 e= 1e-3
-data_id = "Kidney"
+data_id = "BMMC_unpaired"
 ####################################################################
 
 
@@ -25,9 +25,15 @@ data_id = "Kidney"
 # X = data['exp'][0]
 # y = data['exp'][1]
 
-path = './datasets/' + data_id
-data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
-data2 = anndata.read(os.path.join(path, "raw_data_atac.h5ad"))
+# path = './datasets/' + data_id
+# data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
+# data2 = anndata.read(os.path.join(path, "raw_data_atac.h5ad"))
+
+path1 = './datasets/BMMC_s1d1'
+path2 = './datasets/BMMC_s1d2'
+data1 = anndata.read(os.path.join(path1, "raw_data_rna.h5ad"))
+data2 = anndata.read(os.path.join(path2, "raw_data_atac.h5ad"))
+
 X = data1.X
 y = data2.X
 
@@ -50,8 +56,3 @@ if not os.path.exists(path):
 np.save(os.path.join(path, 'scot.npy'), scot_inte)
 
 
-path2 = './alignment/'+ data_id
-if not os.path.exists(path2):
-    os.makedirs(path2)
-
-np.save(os.path.join(path2, 'scot_tran.npy'), tran)

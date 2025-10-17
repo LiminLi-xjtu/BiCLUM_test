@@ -16,7 +16,7 @@ import anndata
 ####################################################################
 numk = 50
 e= 1e-3
-data_id = "Kidney"
+data_id = "PBMC_paired"
 ####################################################################
 
 
@@ -50,8 +50,4 @@ if not os.path.exists(path):
 np.save(os.path.join(path, 'scot.npy'), scot_inte)
 
 
-path2 = './alignment/'+ data_id
-if not os.path.exists(path2):
-    os.makedirs(path2)
 
-np.save(os.path.join(path2, 'scot_tran.npy'), tran)

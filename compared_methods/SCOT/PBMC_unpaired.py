@@ -16,7 +16,7 @@ import anndata
 ####################################################################
 numk = 50
 e= 1e-3
-data_id = "Kidney"
+data_id = "PBMC_unpaired"
 ####################################################################
 
 
@@ -34,7 +34,7 @@ y = data2.X
 # initialize SCOT object
 scot=sc.SCOT(X, y)
 # call the alignment with z-score normalization
-X_aligned, y_aligned, tran = scot.align( k=numk, e=e,  normalize=True)
+X_aligned, y_aligned, tran = scot.align( k=numk, e=3,  normalize=True)
 
 inte = []
 inte.append(X_aligned)
@@ -50,8 +50,3 @@ if not os.path.exists(path):
 np.save(os.path.join(path, 'scot.npy'), scot_inte)
 
 
-path2 = './alignment/'+ data_id
-if not os.path.exists(path2):
-    os.makedirs(path2)
-
-np.save(os.path.join(path2, 'scot_tran.npy'), tran)
