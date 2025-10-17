@@ -13,7 +13,7 @@ import os
 sc.settings.set_figure_params(dpi=80)
 
 ####################################################################
-data_id = "BMMC_s1d1"
+data_id = "BMMC_paired"
 GAM = 'ArchR'
 
 path = "../"
@@ -109,3 +109,4 @@ if not os.path.exists(path):
 inte.write_h5ad(os.path.join(path, GAM + '_new.h5ad'))
 
 # sc.pl.embedding(adata, 'X_multimap', color=['source','cell_type'])
+
