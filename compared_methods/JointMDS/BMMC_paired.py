@@ -13,7 +13,7 @@ import anndata
 ####################################################################
 ncomp = 2
 neighbor = 110
-data_id = "Kidney"
+data_id = "BMMC_paired"
 ####################################################################
 
 def main():
@@ -37,6 +37,7 @@ def main():
     data2 = anndata.read(os.path.join(path, "raw_data_atac.h5ad"))
     X1 = data1.X
     X2 = data2.X
+
 
 
     print(X1.shape)

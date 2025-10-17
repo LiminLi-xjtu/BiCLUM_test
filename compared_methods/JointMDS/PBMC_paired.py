@@ -13,8 +13,14 @@ import anndata
 ####################################################################
 ncomp = 2
 neighbor = 110
-data_id = "Kidney"
+data_id = "PBMC_paired"
 ####################################################################
+
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = "cpu"
+print("Running on", device)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -32,11 +38,12 @@ def main():
     torch.random.manual_seed(0)
 
 
-    path = '../datasets/' + data_id
-    data1 = anndata.read(os.path.join(path, "raw_data_rna.h5ad"))
-    data2 = anndata.read(os.path.join(path, "raw_data_atac.h5ad"))
+    path = '../../../../data/guoyin/1-comp_methods/'
+    data1 = anndata.read(os.path.join(path, 'datasets/' + data_id + "/raw_data_rna.h5ad"))
+    data2 = anndata.read(os.path.join(path, 'datasets/' + data_id + "/raw_data_atac.h5ad"))
     X1 = data1.X
     X2 = data2.X
+
 
 
     print(X1.shape)
@@ -66,7 +73,7 @@ def main():
 
     JM_inte = dict({"inte": inte})
 
-    path = '../results/' + data_id
+    path = './results/' + data_id
     if not os.path.exists(path):
         os.makedirs(path)
 

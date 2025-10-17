@@ -13,7 +13,7 @@ import anndata
 ####################################################################
 ncomp = 2
 neighbor = 110
-data_id = "Kidney"
+data_id = "PBMC_unpaired"
 ####################################################################
 
 def main():
@@ -38,6 +38,9 @@ def main():
     X1 = data1.X
     X2 = data2.X
 
+    # data = np.load(os.path.join(path, 'rawdata.npy'), allow_pickle=True).item()
+    # X1 = data['exp'][0]
+    # X2 = data['exp'][1]
 
     print(X1.shape)
     print(X2.shape)
