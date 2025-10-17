@@ -9,7 +9,7 @@ This repository contains the code and resources for reproducing the results and 
 The repository is organized into three main folders:
 
 1. **`compared_methods`**  
-   This folder contains the implementation of all comparison methods used in the paper. Each method includes a script for running the analysis on the PBMC dataset (e.g., `PBMC.py`).
+   This folder contains the implementation of all comparison methods used in the paper. Each method includes a script for running the analysis on the PBMC dataset (e.g., `PBMC_paired.py`).
    All runs used the default parameters from the official implementations or publications; details and links are listed in `./compared_methods/README.md`.
 
 3. **`eva`**  
@@ -29,7 +29,7 @@ The repository is organized into three main folders:
 2. Run the `PBMC_paired.py` script for each comparison method.  
    Example:
    ```bash
-   python compared_methods/method_name/PBMC.py
+   python compared_methods/method_name/PBMC_paired.py
    ```
    - Replace `method_name` with the desired method (e.g., `Seurat`, `GLUE`).
    - The results for each method will be saved in a `results` folder specific to that method.
