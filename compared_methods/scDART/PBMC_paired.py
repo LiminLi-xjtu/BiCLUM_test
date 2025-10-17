@@ -24,7 +24,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 ####################################################################
 
-data_id = "PBMC"
+data_id = "PBMC_paired"
 dataset_dir ='../datasets/PBMC/'
 adata_rna = anndata.read(os.path.join(dataset_dir, 'GASM/rna.h5ad'))
 adata_atac = anndata.read(os.path.join(dataset_dir, 'GASM/atac.h5ad'))
@@ -75,4 +75,5 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 np.save(os.path.join(path, 'scDART.npy'), scDART_inte)
+
 
