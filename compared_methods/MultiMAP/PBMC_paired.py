@@ -14,9 +14,9 @@ import pandas as pd
 sc.settings.set_figure_params(dpi=80)
 
 ####################################################################
-data_id = "PBMC"
+data_id = "PBMC_paired"
 GAM = 'ArchR' # sys.argv[1]
-dataset_dir = '../../data/PBMC'
+dataset_dir = '../../data/PBMC_paired'
 atac_genes = anndata.read(os.path.join(dataset_dir, 'GASM/scGAM_' + GAM + '.h5ad'))
 rna = anndata.read(os.path.join(dataset_dir, 'GASM/rna.h5ad'))
 atac_peaks = anndata.read(os.path.join(dataset_dir, 'GASM/atac.h5ad'))
@@ -79,5 +79,6 @@ if not os.path.exists(path):
     os.makedirs(path)
 
 inte.write_h5ad(os.path.join(path, GAM + '.h5ad'), compression='gzip')
+
 
 
