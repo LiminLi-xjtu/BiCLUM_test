@@ -26,7 +26,7 @@ The repository is organized into three main folders:
 
 ### Step 1: Run Comparison Methods
 1. Navigate to the `compared_methods` folder.
-2. Run the `PBMC.py` script for each comparison method.  
+2. Run the `PBMC_paired.py` script for each comparison method.  
    Example:
    ```bash
    python compared_methods/method_name/PBMC.py
@@ -36,17 +36,17 @@ The repository is organized into three main folders:
 
 ### Step 2: Evaluate Results
 1. Navigate to the `eva` folder.
-2. Run the evaluation script for the PBMC dataset:  
+2. Run the evaluation script for the PBMC (paired) dataset:  
    ```bash
-   python eva/eva_PBMC.py
+   python eva/eva_PBMC_paired.py
    ```
    - This script will compute the quantitative metrics, such as omics mixing, biology conservation, transfer accuracy, and FOSCTTM scores.
 
 ### Step 3: Generate Visualizations
 1. Navigate to the `vis` folder.
-2. Run the visualization script for the PBMC dataset:  
+2. Run the visualization script for the PBMC (paired) dataset:  
    ```bash
-   python vis/vis_pbmc.py
+   python vis/vis_pbmc_paired.py
    ```
    - This script will generate all visualizations, including UMAP plots, PAGA graphs, and comparison figures, and save them in a designated `plots` folder.
 
